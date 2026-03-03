@@ -1,5 +1,4 @@
 /* ---------- GLOBAL ---------- */
-
 body {
   margin: 0;
   font-family: "Segoe UI", Roboto, sans-serif;
@@ -9,23 +8,18 @@ body {
 }
 
 h1 {
-  margin-top: 30px;
-  font-size: 64px;
+  margin-top: 20px;
+  font-size: 3rem;
   letter-spacing: 4px;
-  font-weight: 700;
-  background: linear-gradient(90deg, #38bdf8, #818cf8);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
 }
 
 /* ---------- SCOREBOARD ---------- */
-
 .scoreboard {
   display: flex;
   justify-content: center;
   gap: 80px;
-  margin: 30px 0;
-  font-size: 28px;
+  margin: 20px 0;
+  font-size: 1.5rem;
   font-weight: 600;
 }
 
@@ -36,63 +30,59 @@ h1 {
   border-radius: 12px;
   background: rgba(255,255,255,0.08);
   backdrop-filter: blur(8px);
-  box-shadow: 0 0 15px rgba(0,0,0,0.3);
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
 }
 
 /* ---------- BOARD ---------- */
-
 .board {
-  max-width: 1400px;
+  max-width: 1200px;
   margin: auto;
   display: grid;
-  gap: 15px;
-  padding: 30px;
+  gap: 10px;
+  padding: 20px;
 }
 
 /* ---------- CELLS ---------- */
-
 .cell {
   background: rgba(255,255,255,0.05);
-  backdrop-filter: blur(12px);
-  border-radius: 16px;
-  padding: 30px 10px;
-  font-size: 32px;
+  backdrop-filter: blur(8px);
+  border-radius: 12px;
+  padding: 20px;
+  font-size: 1.5rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.25s ease;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+  transition: all 0.2s ease;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
 
 .cell:hover {
-  transform: translateY(-6px);
+  transform: translateY(-4px);
   background: rgba(56,189,248,0.15);
-  box-shadow: 0 15px 35px rgba(56,189,248,0.4);
+  box-shadow: 0 10px 25px rgba(56,189,248,0.4);
 }
 
 .disabled {
   background: rgba(255,255,255,0.02);
-  color: rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.3);
   cursor: default;
   box-shadow: none;
   transform: none;
 }
 
 /* ---------- CATEGORY HEADER ---------- */
-
 .cell:first-child,
-.board > .cell:nth-child(-n + 6) {
-  font-size: 22px;
+.board > .cell:nth-child(-n + 3) {
+  font-size: 1.2rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 1px;
   background: linear-gradient(90deg, #6366f1, #3b82f6);
   color: white;
   cursor: default;
-  box-shadow: 0 10px 25px rgba(59,130,246,0.4);
+  box-shadow: 0 5px 15px rgba(59,130,246,0.4);
 }
 
 /* ---------- MODAL ---------- */
-
 .modal {
   position: fixed;
   inset: 0;
@@ -102,36 +92,35 @@ h1 {
   align-items: center;
 }
 
-.hidden {
-  display: none;
-}
+.hidden { display: none; }
 
 .modal-content {
-  background: rgba(30, 41, 59, 0.95);
-  padding: 60px;
+  background: rgba(30,41,59,0.95);
+  padding: 40px;
   border-radius: 20px;
-  max-width: 900px;
+  max-width: 800px;
   width: 80%;
-  box-shadow: 0 25px 60px rgba(0,0,0,0.7);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
   animation: fadeIn 0.3s ease;
 }
 
-.modal-content h2 {
-  font-size: 42px;
-  margin-bottom: 30px;
+.modal-content h2,
+.modal-content .question {
+  font-size: 2rem;
+  margin-bottom: 20px;
 }
 
-.modal-content p {
-  font-size: 32px;
+.modal-content .points {
+  font-size: 1.5rem;
   color: #38bdf8;
+  margin-bottom: 20px;
 }
 
 /* ---------- BUTTONS ---------- */
-
 button {
-  font-size: 18px;
+  font-size: 1rem;
   font-weight: 600;
-  padding: 12px 24px;
+  padding: 10px 20px;
   margin: 10px;
   border-radius: 12px;
   border: none;
@@ -142,33 +131,22 @@ button {
 }
 
 button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 20px rgba(99,102,241,0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(99,102,241,0.5);
 }
 
 /* ---------- ANIMATION ---------- */
-
 @keyframes fadeIn {
   from { opacity: 0; transform: scale(0.95); }
   to { opacity: 1; transform: scale(1); }
 }
 
 /* ---------- TEAM COLORS ---------- */
-
-.team1 {
-  background: linear-gradient(90deg, #06b6d4, #3b82f6);
-}
-
-.team2 {
-  background: linear-gradient(90deg, #ec4899, #8b5cf6);
-}
-
 #score1 {
   background: linear-gradient(90deg, #06b6d4, #3b82f6);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   font-weight: 700;
-  font-size: 32px;
 }
 
 #score2 {
@@ -176,21 +154,9 @@ button:hover {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   font-weight: 700;
-  font-size: 32px;
-}
-
-/* Sieger Highlight */
-.winner {
-  animation: pulse 1s infinite alternate;
-}
-
-@keyframes pulse {
-  from { transform: scale(1); }
-  to { transform: scale(1.08); }
 }
 
 /* ---------- WINNER SCREEN ---------- */
-
 #winnerScreen {
   position: fixed;
   inset: 0;
@@ -204,10 +170,6 @@ button:hover {
 }
 
 #winnerScreen h1 {
-  font-size: 72px;
-  margin-bottom: 30px;
-}
-
-#winnerScreen button {
-  font-size: 22px;
+  font-size: 3rem;
+  margin-bottom: 20px;
 }

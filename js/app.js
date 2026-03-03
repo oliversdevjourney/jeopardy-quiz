@@ -1,9 +1,5 @@
-console.log("JS STARTET");
-// -------------------- GLOBAL --------------------
-let score1 = 0;
-let score2 = 0;
-let currentPoints = 0;
 
+let score1 = 0, score2 = 0, currentPoints = 0;
 const categories = [
   {
     name: "Filme",
@@ -55,160 +51,53 @@ const categories = [
   }
 ];
 
-// -------------------- DOM READY --------------------
-document.addEventListener("DOMContentLoaded", () => {
-  loadState();
-  console.log("DOM GELADEN");
-  const board = document.getElementById("board");
-  console.log("Board:", board);
-});
+const board = document.getElementById("board");
 
-  function createBoard() {
-    const columnCount = categories.length;
-    const rowCount = categories[0].questions.length + 1; // +1 für Kategoriezeile
+function createBoard() {
+  board.innerHTML="";
+  board.style.gridTemplateColumns=`repeat(${categories.length},1fr)`;
+  board.style.gridTemplateRows=`repeat(${categories[0].questions.length+1},auto)`;
 
-    board.style.gridTemplateColumns = `repeat(${columnCount}, 1fr)`;
-    board.style.gridTemplateRows = `repeat(${rowCount}, auto)`;
+  categories.forEach(cat=>{
+    const header=document.createElement("div");
+    header.classList.add("cell");
+    header.textContent=cat.name;
+    header.style.cursor="default";
+    board.appendChild(header);
+  });
 
-    // Kategoriezeile
-    categories.forEach(category => {
-      const header = document.createElement("div");
-      header.classList.add("cell");
-      header.textContent = category.name;
-      header.style.fontWeight = "bold";
-      header.style.cursor = "default";
-      board.appendChild(header);
-    });
+  for(let r=0;r<categories[0].questions.length;r++){
+    for(let c=0;c<categories.length;c++){
+      const q=categories[c].questions[r];
+      const cell=document.createElement("div");
+      cell.classList.add("cell");
+      cell.textContent=q.points;
+      if(q.asked) cell.classList.add("disabled");
 
-    // Fragen-Zeilen
-    for (let row = 0; row < categories[0].questions.length; row++) {
-      for (let col = 0; col < categories.length; col++) {
-        const question = categories[col].questions[row];
-        const cell = document.createElement("div");
-        cell.classList.add("cell");
-        cell.textContent = question.points;
+      cell.addEventListener("click",()=>{
+        if(!q.asked){
+          q.asked=true;
+          cell.classList.add("disabled");
+          openQuestion(q,categories[c].name);
+        }
+      });
 
-        cell.addEventListener("click", () => {
-          if (!question.asked) {
-            openQuestion(question);
-            question.asked = true;
-            cell.classList.add("disabled");
-            saveState();
-          }
-        });
-
-        board.appendChild(cell);
-      }
+      board.appendChild(cell);
     }
   }
+}
 
-// -------------------- MODAL --------------------
-function openQuestion(q) {
+function openQuestion(q,catName){
   document.getElementById("modal").classList.remove("hidden");
-  document.getElementById("questionText").textContent = q.question;
-  document.getElementById("answerText").textContent = q.answer;
-  document.getElementById("answerText").classList.add("hidden");
-  currentPoints = q.points;
+  document.getElementById("modalQuestion").textContent=q.question;
+  document.getElementById("modalPoints").textContent=q.points+" Punkte";
+  document.getElementById("modalCategory").textContent=catName;
+
+  localStorage.setItem("jeopardyState",JSON.stringify({
+    currentQuestion:{question:q.question,answer:q.answer,points:q.points,category:catName}
+  }));
 }
 
-function showAnswer() {
-  document.getElementById("answerText").classList.remove("hidden");
-}
-
-function closeModal() {
-  document.getElementById("modal").classList.add("hidden");
-  checkWinner();
-}
-
-// -------------------- PUNKTE --------------------
-function addPoints(team) {
-  if (team === 1) {
-    score1 += currentPoints;
-    document.getElementById("score1").textContent = score1;
-  } else {
-    score2 += currentPoints;
-    document.getElementById("score2").textContent = score2;
-  }
-  saveState();
-  checkWinner();
-}
-
-// -------------------- SIEGER --------------------
-function checkWinner() {
-  const allAsked = categories.every(cat =>
-    cat.questions.every(q => q.asked)
-  );
-
-  if (allAsked) {
-    showWinner();
-  }
-}
-
-function showWinner() {
-  const winnerScreen = document.getElementById("winnerScreen");
-  const winnerText = document.getElementById("winnerText");
-
-  let winner;
-  if (score1 > score2) {
-    winner = "Team 1 gewinnt! 🏆";
-    document.getElementById("score1").classList.add("winner");
-  } else if (score2 > score1) {
-    winner = "Team 2 gewinnt! 🏆";
-    document.getElementById("score2").classList.add("winner");
-  } else {
-    winner = "Unentschieden!";
-  }
-
-  winnerText.textContent = winner;
-  winnerScreen.classList.remove("hidden");
-
-  // Board blockieren
-  document.querySelectorAll(".cell").forEach(cell => cell.classList.add("disabled"));
-}
-
-// -------------------- OPTIONAL: LOCAL STORAGE --------------------
-const defaultGameState = {
-  score1: 0,
-  score2: 0,
-  categories: categories
-};
-
-function saveGameState(state) {
-  localStorage.setItem("jeopardyGame", JSON.stringify(state));
-}
-
-function loadGameState() {
-  const data = localStorage.getItem("jeopardyGame");
-  return data ? JSON.parse(data) : defaultGameState;
-}
-
-function saveState() {
-  const state = {
-    score1,
-    score2,
-    categories
-  };
-  localStorage.setItem("jeopardyState", JSON.stringify(state));
-}
-
-function loadState() {
-  const state = localStorage.getItem("jeopardyState");
-  if (!state) return;
-
-  const parsed = JSON.parse(state);
-  score1 = parsed.score1;
-  score2 = parsed.score2;
-
-  document.getElementById("score1").textContent = score1;
-  document.getElementById("score2").textContent = score2;
-}
-
-
-
+document.getElementById("modal").addEventListener("click",()=>{document.getElementById("modal").classList.add("hidden");});
 
 createBoard();
-
-window.addEventListener("storage", () => {
-  //location.reload();
-  loadState();
-});
