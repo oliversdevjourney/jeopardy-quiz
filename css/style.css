@@ -163,6 +163,22 @@ button:hover {
   background: linear-gradient(90deg, #ec4899, #8b5cf6);
 }
 
+#score1 {
+  background: linear-gradient(90deg, #06b6d4, #3b82f6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 700;
+  font-size: 32px;
+}
+
+#score2 {
+  background: linear-gradient(90deg, #ec4899, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 700;
+  font-size: 32px;
+}
+
 /* Sieger Highlight */
 .winner {
   animation: pulse 1s infinite alternate;

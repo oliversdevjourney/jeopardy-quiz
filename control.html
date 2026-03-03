@@ -1,18 +1,152 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <title>Jeopardy Control</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title></title>
   <link rel="stylesheet" href="css/style.css">
+  <meta name="description" content="">
+
+  <meta property="og:title" content="">
+  <meta property="og:type" content="">
+  <meta property="og:url" content="">
+  <meta property="og:image" content="">
+  <meta property="og:image:alt" content="">
+
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon.png">
+
+  <link rel="manifest" href="site.webmanifest">
+  <title>Jeopardy Control Panel</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .controls-section {
+      margin: 30px 0;
+    }
+
+    .question-block {
+      background: rgba(255,255,255,0.05);
+      padding: 15px;
+      margin: 10px 0;
+      border-radius: 12px;
+    }
+
+    .asked {
+      opacity: 0.3;
+    }
+
+    .answer {
+      color: #38bdf8;
+      margin-top: 5px;
+      font-size: 14px;
+    }
+
+    .point-buttons button {
+      margin: 5px;
+      padding: 6px 12px;
+      font-size: 14px;
+    }
+
+    #score1 {
+      background: linear-gradient(90deg, #06b6d4, #3b82f6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 700;
+    }
+
+    #score2 {
+      background: linear-gradient(90deg, #ec4899, #8b5cf6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 700;
+    }
+  </style>
 </head>
 <body>
 
 <h1>CONTROL PANEL</h1>
 
-<button onclick="addPoints(1)">+100 Team 1</button>
-<button onclick="addPoints(2)">+100 Team 2</button>
-<button onclick="resetGame()">Reset Game</button>
+<!-- SCOREBOARD -->
+<div class="scoreboard">
+  <div>
+    Team 1: <span id="score1">0</span><br>
+    <div class="point-buttons">
+      <button onclick="changePoints(1,100)">+100</button>
+      <button onclick="changePoints(1,-100)">-100</button>
+    </div>
+  </div>
 
-<script src="js/control.js"></script>
+  <div>
+    Team 2: <span id="score2">0</span><br>
+    <div class="point-buttons">
+      <button onclick="changePoints(2,100)">+100</button>
+      <button onclick="changePoints(2,-100)">-100</button>
+    </div>
+  </div>
+</div>
+
+<div class="controls-section">
+  <h2>Fragenübersicht</h2>
+  <div id="questionOverview"></div>
+</div>
+
+<script>
+  function loadState() {
+    const state = JSON.parse(localStorage.getItem("jeopardyState"));
+    if (!state) return;
+
+    document.getElementById("score1").textContent = state.score1;
+    document.getElementById("score2").textContent = state.score2;
+
+    renderQuestions(state.categories);
+  }
+
+  function saveState(state) {
+    localStorage.setItem("jeopardyState", JSON.stringify(state));
+  }
+
+  function changePoints(team, amount) {
+    const state = JSON.parse(localStorage.getItem("jeopardyState"));
+    if (!state) return;
+
+    if (team === 1) state.score1 += amount;
+    else state.score2 += amount;
+
+    saveState(state);
+    loadState();
+  }
+
+  function renderQuestions(categories) {
+    const container = document.getElementById("questionOverview");
+    container.innerHTML = "";
+
+    categories.forEach(category => {
+      const catTitle = document.createElement("h3");
+      catTitle.textContent = category.name;
+      container.appendChild(catTitle);
+
+      category.questions.forEach(q => {
+        const block = document.createElement("div");
+        block.classList.add("question-block");
+
+        if (q.asked) block.classList.add("asked");
+
+        block.innerHTML = `
+        <strong>${q.points} Punkte</strong><br>
+        ${q.question}
+        <div class="answer">Antwort: ${q.answer}</div>
+      `;
+
+        container.appendChild(block);
+      });
+    });
+  }
+
+  window.addEventListener("storage", loadState);
+
+  loadState();
+</script>
+
 </body>
 </html>

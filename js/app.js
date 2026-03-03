@@ -1,3 +1,5 @@
+console.log("JS STARTET");
+// -------------------- GLOBAL --------------------
 let score1 = 0;
 let score2 = 0;
 let currentPoints = 0;
@@ -53,49 +55,54 @@ const categories = [
   }
 ];
 
-const board = document.getElementById("board");
+// -------------------- DOM READY --------------------
+document.addEventListener("DOMContentLoaded", () => {
+  loadState();
+  console.log("DOM GELADEN");
+  const board = document.getElementById("board");
+  console.log("Board:", board);
+});
 
-function createBoard() {
+  function createBoard() {
+    const columnCount = categories.length;
+    const rowCount = categories[0].questions.length + 1; // +1 für Kategoriezeile
 
-  const columnCount = categories.length;
-  const rowCount = categories[0].questions.length + 1; // +1 für Kategoriezeile
+    board.style.gridTemplateColumns = `repeat(${columnCount}, 1fr)`;
+    board.style.gridTemplateRows = `repeat(${rowCount}, auto)`;
 
-  board.style.gridTemplateColumns = `repeat(${columnCount}, 1fr)`;
-  board.style.gridTemplateRows = `repeat(${rowCount}, auto)`;
+    // Kategoriezeile
+    categories.forEach(category => {
+      const header = document.createElement("div");
+      header.classList.add("cell");
+      header.textContent = category.name;
+      header.style.fontWeight = "bold";
+      header.style.cursor = "default";
+      board.appendChild(header);
+    });
 
-  // Kategoriezeile: fett & ohne Hover
-  categories.forEach(category => {
-    const header = document.createElement("div");
-    header.classList.add("cell");
-    header.textContent = category.name;
-    header.style.fontWeight = "bold";
-    header.style.cursor = "default"; // kein Pointer
-    board.appendChild(header);
-  });
+    // Fragen-Zeilen
+    for (let row = 0; row < categories[0].questions.length; row++) {
+      for (let col = 0; col < categories.length; col++) {
+        const question = categories[col].questions[row];
+        const cell = document.createElement("div");
+        cell.classList.add("cell");
+        cell.textContent = question.points;
 
-  // 2️⃣ Fragen-Zeilen
-  for (let row = 0; row < categories[0].questions.length; row++) {
-    for (let col = 0; col < categories.length; col++) {
+        cell.addEventListener("click", () => {
+          if (!question.asked) {
+            openQuestion(question);
+            question.asked = true;
+            cell.classList.add("disabled");
+            saveState();
+          }
+        });
 
-      const question = categories[col].questions[row];
-
-      const cell = document.createElement("div");
-      cell.classList.add("cell");
-      cell.textContent = question.points;
-
-      cell.addEventListener("click", () => {
-        if (!question.asked) {
-          openQuestion(question);
-          question.asked = true;
-          cell.classList.add("disabled");
-        }
-      });
-
-      board.appendChild(cell);
+        board.appendChild(cell);
+      }
     }
   }
-}
 
+// -------------------- MODAL --------------------
 function openQuestion(q) {
   document.getElementById("modal").classList.remove("hidden");
   document.getElementById("questionText").textContent = q.question;
@@ -104,6 +111,29 @@ function openQuestion(q) {
   currentPoints = q.points;
 }
 
+function showAnswer() {
+  document.getElementById("answerText").classList.remove("hidden");
+}
+
+function closeModal() {
+  document.getElementById("modal").classList.add("hidden");
+  checkWinner();
+}
+
+// -------------------- PUNKTE --------------------
+function addPoints(team) {
+  if (team === 1) {
+    score1 += currentPoints;
+    document.getElementById("score1").textContent = score1;
+  } else {
+    score2 += currentPoints;
+    document.getElementById("score2").textContent = score2;
+  }
+  saveState();
+  checkWinner();
+}
+
+// -------------------- SIEGER --------------------
 function checkWinner() {
   const allAsked = categories.every(cat =>
     cat.questions.every(q => q.asked)
@@ -118,38 +148,25 @@ function showWinner() {
   const winnerScreen = document.getElementById("winnerScreen");
   const winnerText = document.getElementById("winnerText");
 
-
   let winner;
-  if (score1 > score2) winner = "Team 1 gewinnt! 🏆";
-  else if (score2 > score1) winner = "Team 2 gewinnt! 🏆";
-  else winner = "Unentschieden!";
+  if (score1 > score2) {
+    winner = "Team 1 gewinnt! 🏆";
+    document.getElementById("score1").classList.add("winner");
+  } else if (score2 > score1) {
+    winner = "Team 2 gewinnt! 🏆";
+    document.getElementById("score2").classList.add("winner");
+  } else {
+    winner = "Unentschieden!";
+  }
 
   winnerText.textContent = winner;
-
-  // Siegerbildschirm einblenden
   winnerScreen.classList.remove("hidden");
 
-  // Optional: Buttons deaktivieren, Fragen blockieren
+  // Board blockieren
   document.querySelectorAll(".cell").forEach(cell => cell.classList.add("disabled"));
 }
 
-
-
-function showAnswer() {
-  document.getElementById("answerText").classList.remove("hidden");
-}
-
-function addPoints(team) {
-  if (team === 1) {
-    score1 += currentPoints;
-    document.getElementById("score1").textContent = score1;
-  } else {
-    score2 += currentPoints;
-    document.getElementById("score2").textContent = score2;
-  }
-  checkWinner();
-}
-
+// -------------------- OPTIONAL: LOCAL STORAGE --------------------
 const defaultGameState = {
   score1: 0,
   score2: 0,
@@ -165,13 +182,33 @@ function loadGameState() {
   return data ? JSON.parse(data) : defaultGameState;
 }
 
-function closeModal() {
-  document.getElementById("modal").classList.add("hidden");
-  checkWinner();
+function saveState() {
+  const state = {
+    score1,
+    score2,
+    categories
+  };
+  localStorage.setItem("jeopardyState", JSON.stringify(state));
 }
-window.addEventListener("storage", () => {
-  location.reload();
-});
+
+function loadState() {
+  const state = localStorage.getItem("jeopardyState");
+  if (!state) return;
+
+  const parsed = JSON.parse(state);
+  score1 = parsed.score1;
+  score2 = parsed.score2;
+
+  document.getElementById("score1").textContent = score1;
+  document.getElementById("score2").textContent = score2;
+}
+
+
 
 
 createBoard();
+
+window.addEventListener("storage", () => {
+  //location.reload();
+  loadState();
+});
