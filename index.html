@@ -28,8 +28,8 @@
   <h1>JEOPARDY</h1>
 
   <div class="scoreboard">
-    <div>Team 1: <span id="score1">0</span></div>
-    <div>Team 2: <span id="score2">0</span></div>
+    <div>Team 1: <span id="score1" class="team1">0</span></div>
+    <div>Team 2: <span id="score2" class="team2">0</span></div>
   </div>
 
   <div id="board" class="board"></div>
@@ -47,6 +47,11 @@
         <button onclick="closeModal()">Schließen</button>
       </div>
     </div>
+  </div>
+
+  <div id="winnerScreen" class="hidden">
+    <h1 id="winnerText"></h1>
+    <button onclick="restartGame()">Neues Spiel</button>
   </div>
 
   <script src="js/app.js"></script>

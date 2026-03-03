@@ -26,6 +26,30 @@ const categories = [
       { points: 200, question: "In welchem Land wurden die Olympischen Spiele erfunden?", answer: "Griechenland", asked: false },
       { points: 300, question: "Wie lange dauert ein Basketballspiel (NBA)?", answer: "48 Minuten", asked: false }
     ]
+  },
+  {
+    name: "Musik",
+    questions: [
+      { points: 100, question: "Wer ist der King of Pop?", answer: "Michael Jackson", asked: false },
+      { points: 200, question: "Wie viele Saiten hat eine Gitarre?", answer: "6", asked: false },
+      { points: 300, question: "Welche Band schrieb 'Bohemian Rhapsody'?", answer: "Queen", asked: false }
+    ]
+  },
+  {
+    name: "Technik",
+    questions: [
+      { points: 100, question: "Wofür steht HTML?", answer: "HyperText Markup Language", asked: false },
+      { points: 200, question: "Wer entwickelte Windows?", answer: "Microsoft", asked: false },
+      { points: 300, question: "Was ist die Abkürzung für CPU?", answer: "Central Processing Unit", asked: false }
+    ]
+  },
+  {
+    name: "Fun Facts",
+    questions: [
+      { points: 100, question: "Wie viele Herzen hat ein Oktopus?", answer: "3", asked: false },
+      { points: 200, question: "Welches Tier kann nicht springen?", answer: "Elefant", asked: false },
+      { points: 300, question: "Was ist das schnellste Landtier?", answer: "Gepard", asked: false }
+    ]
   }
 ];
 
@@ -79,6 +103,38 @@ function openQuestion(q) {
   currentPoints = q.points;
 }
 
+function checkWinner() {
+  const allAsked = categories.every(cat =>
+    cat.questions.every(q => q.asked)
+  );
+
+  if (allAsked) {
+    showWinner();
+  }
+}
+
+function showWinner() {
+  const winnerScreen = document.getElementById("winnerScreen");
+  const winnerText = document.getElementById("winnerText");
+
+  let winner;
+
+  if (score1 > score2) {
+    winner = "Team 1 gewinnt! 🏆";
+  } else if (score2 > score1) {
+    winner = "Team 2 gewinnt! 🏆";
+  } else {
+    winner = "Unentschieden!";
+  }
+
+  winnerText.textContent = winner;
+  winnerScreen.classList.remove("hidden");
+}
+
+function restartGame() {
+  location.reload();
+}
+
 function showAnswer() {
   document.getElementById("answerText").classList.remove("hidden");
 }
@@ -109,6 +165,7 @@ function loadGameState() {
 
 function closeModal() {
   document.getElementById("modal").classList.add("hidden");
+  checkWinner();
 }
 window.addEventListener("storage", () => {
   location.reload();
