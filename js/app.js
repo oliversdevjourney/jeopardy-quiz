@@ -63,12 +63,13 @@ function createBoard() {
   board.style.gridTemplateColumns = `repeat(${columnCount}, 1fr)`;
   board.style.gridTemplateRows = `repeat(${rowCount}, auto)`;
 
-  // 1️⃣ Kategorien-Zeile
+  // Kategoriezeile: fett & ohne Hover
   categories.forEach(category => {
     const header = document.createElement("div");
     header.classList.add("cell");
     header.textContent = category.name;
     header.style.fontWeight = "bold";
+    header.style.cursor = "default"; // kein Pointer
     board.appendChild(header);
   });
 
@@ -117,23 +118,22 @@ function showWinner() {
   const winnerScreen = document.getElementById("winnerScreen");
   const winnerText = document.getElementById("winnerText");
 
-  let winner;
 
-  if (score1 > score2) {
-    winner = "Team 1 gewinnt! 🏆";
-  } else if (score2 > score1) {
-    winner = "Team 2 gewinnt! 🏆";
-  } else {
-    winner = "Unentschieden!";
-  }
+  let winner;
+  if (score1 > score2) winner = "Team 1 gewinnt! 🏆";
+  else if (score2 > score1) winner = "Team 2 gewinnt! 🏆";
+  else winner = "Unentschieden!";
 
   winnerText.textContent = winner;
+
+  // Siegerbildschirm einblenden
   winnerScreen.classList.remove("hidden");
+
+  // Optional: Buttons deaktivieren, Fragen blockieren
+  document.querySelectorAll(".cell").forEach(cell => cell.classList.add("disabled"));
 }
 
-function restartGame() {
-  location.reload();
-}
+
 
 function showAnswer() {
   document.getElementById("answerText").classList.remove("hidden");
@@ -147,7 +147,9 @@ function addPoints(team) {
     score2 += currentPoints;
     document.getElementById("score2").textContent = score2;
   }
+  checkWinner();
 }
+
 const defaultGameState = {
   score1: 0,
   score2: 0,
