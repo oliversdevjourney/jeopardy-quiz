@@ -2,7 +2,6 @@
 body {
   margin: 0;
   font-family: "Segoe UI", Roboto, sans-serif;
-  /*font-family:"press Start 2P";*/
   background: linear-gradient(135deg, #0f172a, #1e293b);
   color: #f8fafc;
   text-align: center;
@@ -73,6 +72,10 @@ h1 {
 /* ---------- CATEGORY HEADER ---------- */
 .cell:first-child,
 .board > .cell:nth-child(-n + 6) {
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
   font-size: 1.2rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -157,20 +160,67 @@ button:hover {
   font-weight: 700;
 }
 
-/* ---------- WINNER SCREEN ---------- */
-#winnerScreen {
-  position: fixed;
-  inset: 0;
-  background: linear-gradient(135deg, #0f172a, #1e293b);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  text-align: center;
-  z-index: 1000;
+#score3 {
+  background: linear-gradient(90deg, #22c55e, #16a34a);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 700;
 }
 
-#winnerScreen h1 {
-  font-size: 3rem;
-  margin-bottom: 20px;
+#score4 {
+  background: linear-gradient(90deg, #f59e0b, #ef4444);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 700;
+}
+
+/* ---------- SNOW BACKGROUND ---------- */
+
+#partikel-container {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0; /* ganz hinten */
+  pointer-events: none;
+}
+
+.partikel {
+  position: absolute;
+  top: -50px;
+  width: 300px;
+  height: 300px;
+  background: url("/img/uclogo.jpg")no-repeat center;
+  background-size:contain;
+  border-radius: 50%;
+  opacity: 0.8;
+  animation: fall 5s linear forwards;
+}
+
+/* Fall-Animation */
+@keyframes fall {
+  to {
+    transform: translateY(110vh) translateX(50px);
+  }
+}
+
+/* WICHTIG: Board nach vorne holen */
+.board,
+.scoreboard,
+h1,
+.modal {
+  position: relative;
+  z-index: 10;
+}
+
+/* ---------- TOP RIGHT TEXT ---------- */
+.top-right-text {
+  position: fixed;
+  top: 20px;
+  right: 30px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #f8fafc;
+  opacity: 0.8;
+  z-index: 50;
+  text-shadow: 0 0 10px #38bdf8;
 }

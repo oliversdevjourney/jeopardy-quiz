@@ -98,6 +98,31 @@ function createBoard() {
     }
   }
 }
+const partikelContainer = document.getElementById("partikel-container");
+
+function createPartikel() {
+  const partikel = document.createElement("div");
+  partikel.classList.add("partikel");
+
+  // Zufällige Startposition
+  partikel.style.left = Math.random() * 100 + "vw";
+
+  // Zufällige Größe
+  const size = Math.random() * 12 + 8;
+  partikel.style.width = size + "px";
+  partikel.style.height = size + "px";
+
+  // Zufällige Geschwindigkeit
+  const duration = Math.random() * 20 + 20;
+  partikel.style.animationDuration = duration + "s";
+
+  partikelContainer.appendChild(partikel);
+
+  // Entfernen nach Animation
+  setTimeout(() => {
+    partikel.remove();
+  }, duration * 1000);
+}
 
 function openQuestion(q,catName){
   document.getElementById("modal").classList.remove("hidden");
@@ -111,5 +136,8 @@ function openQuestion(q,catName){
 }
 
 document.getElementById("modal").addEventListener("click",()=>{document.getElementById("modal").classList.add("hidden");});
-
+console.log("Partikel läuft");
 createBoard();
+
+// Alle 200ms neue Flocke
+setInterval(createPartikel, 1800);
