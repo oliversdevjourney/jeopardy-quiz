@@ -1,0 +1,11 @@
+Jeopardy:
+
+Whose Turn ( team 1 turn, team 2 turn, team 3 turn, team 4 turn)
+Antwort Modal ( Kategorie und Punkte nebeneinander, Frage dick, wer dran ist) --> bei falscher Antwort frage ans nächste Team weitergeben
+Falsche Antwort Modal --> Bildschirm kurz Rot und mit nem Fade weg und in roter Schrift Falsch, warte auf Antwort von Team X
+Richtige Antwort Modal --> Bildschirm kurz Grün und in Grüner Schrift Antwort
+Im Modal Bilder hinzufügen je nach Frage etc.
+Im Hintergrund Uc logos Animieren
+Macht euch mal Geil
+
+Subway Surfer gameplay

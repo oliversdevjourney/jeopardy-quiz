@@ -2,6 +2,7 @@
 body {
   margin: 0;
   font-family: "Segoe UI", Roboto, sans-serif;
+  /*font-family:"press Start 2P";*/
   background: linear-gradient(135deg, #0f172a, #1e293b);
   color: #f8fafc;
   text-align: center;
@@ -71,7 +72,7 @@ h1 {
 
 /* ---------- CATEGORY HEADER ---------- */
 .cell:first-child,
-.board > .cell:nth-child(-n + 3) {
+.board > .cell:nth-child(-n + 6) {
   font-size: 1.2rem;
   font-weight: 700;
   text-transform: uppercase;
